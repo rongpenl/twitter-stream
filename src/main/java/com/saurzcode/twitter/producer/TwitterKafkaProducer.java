@@ -44,10 +44,12 @@ public class TwitterKafkaProducer {
 
 
         client.connect();
+        java.util.logging.Logger.getLogger("class").info("connected");
         try (Producer<Long, String> producer = getProducer()) {
             while (true) {
                 ProducerRecord<Long, String> message = new ProducerRecord<>(TwitterKafkaConfig.TOPIC, queue.take());
                 producer.send(message);
+                java.util.logging.Logger.getLogger("class").info("sending message");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
