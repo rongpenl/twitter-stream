@@ -27,16 +27,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TwitterKafkaProducer {
 
 
-    private static void run(String consumerKey, String consumerSecret,
-                            String token, String secret, String term) {
+    private static void run() {
 
         BlockingQueue<String> queue = new LinkedBlockingQueue<>(10000);
         StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
         endpoint.trackTerms(Lists.newArrayList(
-                term));
+                TwitterKafkaConfig.TwitterConfig.TERM));
 
-        Authentication auth = new OAuth1(consumerKey, consumerSecret, token,
-                secret);
+        Authentication auth = new OAuth1(
+                TwitterKafkaConfig.TwitterConfig.CONSUMER_KEY,
+                TwitterKafkaConfig.TwitterConfig.CONSUMER_SECRET,
+                TwitterKafkaConfig.TwitterConfig.TOKEN,
+                TwitterKafkaConfig.TwitterConfig.SECRET);
 
         Client client = new ClientBuilder().hosts(Constants.STREAM_HOST)
                 .endpoint(endpoint).authentication(auth)
@@ -47,7 +49,7 @@ public class TwitterKafkaProducer {
         java.util.logging.Logger.getLogger("class").info("connected");
         try (Producer<Long, String> producer = getProducer()) {
             while (true) {
-                ProducerRecord<Long, String> message = new ProducerRecord<>(TwitterKafkaConfig.TOPIC, queue.take());
+                ProducerRecord<Long, String> message = new ProducerRecord<>(TwitterKafkaConfig.KafkaConfig.TOPIC, queue.take());
                 producer.send(message);
                 java.util.logging.Logger.getLogger("class").info("sending message");
             }
@@ -60,27 +62,47 @@ public class TwitterKafkaProducer {
 
     private static Producer<Long, String> getProducer() {
         Properties properties = new Properties();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, TwitterKafkaConfig.SERVERS);
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, TwitterKafkaConfig.KafkaConfig.SERVERS);
         properties.put(ProducerConfig.ACKS_CONFIG, "1");
         properties.put(ProducerConfig.LINGER_MS_CONFIG, 500);
         properties.put(ProducerConfig.RETRIES_CONFIG, 0);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        if (!TwitterKafkaConfig.KafkaConfig.USER_NAME.isEmpty()) {
+            String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
+            String jaasCfg = String.format(jaasTemplate,
+                    TwitterKafkaConfig.KafkaConfig.USER_NAME, TwitterKafkaConfig.KafkaConfig.PASSWORD);
+            properties.put("security.protocol", "SASL_SSL");
+            properties.put("sasl.mechanism", "SCRAM-SHA-256");
+            properties.put("sasl.jaas.config", jaasCfg);
+        }
+
         return new KafkaProducer<>(properties);
     }
 
     public static void main(String[] args) {
 
-        if (args.length != 5)
-            throw new IllegalArgumentException("Please Pass 5 arguments, in order - consumerKey, consumerSecret, token, secret, and term");
+        if (args.length < 5)
+            throw new IllegalArgumentException("Please Pass 5 arguments, " +
+                    "in order - consumerKey, consumerSecret, token, secret, and term + " +
+                    "If using remote kafka pass servers followed by username and password");
         //These should be passed in VM arguments for the application.
-        String consumerKey = args[0];
-        String consumerSecret = args[1];
-        String token = args[2];
-        String secret = args[3];
-        String term = args[4]; // term on twitter on which you want to filter the results on.
+        TwitterKafkaConfig.TwitterConfig.CONSUMER_KEY = args[0];
+        TwitterKafkaConfig.TwitterConfig.CONSUMER_SECRET = args[1];
+        TwitterKafkaConfig.TwitterConfig.TOKEN = args[2];
+        TwitterKafkaConfig.TwitterConfig.SECRET = args[3];
+        TwitterKafkaConfig.TwitterConfig.TERM = args[4]; // term on twitter on which you want to filter the results on.
 
-        TwitterKafkaProducer.run(consumerKey, consumerSecret, token, secret, term);
+        if (args.length > 5) {
+            TwitterKafkaConfig.KafkaConfig.SERVERS = args[5];
+            TwitterKafkaConfig.KafkaConfig.USER_NAME = args[6];
+            TwitterKafkaConfig.KafkaConfig.PASSWORD = args[7];
+            TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s",
+                    TwitterKafkaConfig.KafkaConfig.USER_NAME,
+                    TwitterKafkaConfig.KafkaConfig.TOPIC);
+        }
+        TwitterKafkaProducer.run();
 
     }
 }
