@@ -76,6 +76,7 @@ public class TwitterKafkaProducer {
             properties.put("security.protocol", "SASL_SSL");
             properties.put("sasl.mechanism", "SCRAM-SHA-256");
             properties.put("sasl.jaas.config", jaasCfg);
+            properties.put("compression.codec", "1");
         }
 
         return new KafkaProducer<>(properties);
