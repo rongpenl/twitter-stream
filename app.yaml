@@ -1,0 +1,9 @@
+runtime: custom
+env: flex
+service: twitter-kafka-stream-vaccine
+runtime_config:
+  jdk: openjdk8
+
+includes:
+  - params.yaml
+

@@ -49,7 +49,9 @@ public class TwitterKafkaProducer {
         java.util.logging.Logger.getLogger("class").info("connected");
         try (Producer<Long, String> producer = getProducer()) {
             while (true) {
-                ProducerRecord<Long, String> message = new ProducerRecord<>(TwitterKafkaConfig.KafkaConfig.TOPIC, queue.take());
+                ProducerRecord<Long, String> message = new ProducerRecord<>(
+                        String.format("%s-%s", TwitterKafkaConfig.KafkaConfig.TOPIC, TwitterKafkaConfig.TwitterConfig.TERM),
+                        queue.take());
                 producer.send(message);
                 java.util.logging.Logger.getLogger("class").info("sending message");
             }
@@ -83,7 +85,10 @@ public class TwitterKafkaProducer {
     }
 
     public static void main(String[] args) {
-
+        String configVar = System.getenv(TwitterKafkaConfig.CONFIG_ENV_VAR);
+        if (configVar != null && !configVar.isEmpty()) {
+            args = configVar.split(" ");
+        }
         if (args.length < 5)
             throw new IllegalArgumentException("Please Pass 5 arguments, " +
                     "in order - consumerKey, consumerSecret, token, secret, and term + " +
@@ -97,6 +102,9 @@ public class TwitterKafkaProducer {
 
         if (args.length > 5) {
             TwitterKafkaConfig.KafkaConfig.SERVERS = args[5];
+        }
+
+        if (args.length > 6) {
             TwitterKafkaConfig.KafkaConfig.USER_NAME = args[6];
             TwitterKafkaConfig.KafkaConfig.PASSWORD = args[7];
             TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s",
