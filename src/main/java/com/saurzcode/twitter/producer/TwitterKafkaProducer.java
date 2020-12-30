@@ -50,7 +50,7 @@ public class TwitterKafkaProducer {
         try (Producer<Long, String> producer = getProducer()) {
             while (true) {
                 ProducerRecord<Long, String> message = new ProducerRecord<>(
-                        String.format("%s-%s", TwitterKafkaConfig.KafkaConfig.TOPIC, TwitterKafkaConfig.TwitterConfig.TERM),
+                        TwitterKafkaConfig.KafkaConfig.TOPIC,
                         queue.take());
                 producer.send(message);
                 java.util.logging.Logger.getLogger("class").info("sending message");
@@ -98,8 +98,9 @@ public class TwitterKafkaProducer {
         TwitterKafkaConfig.TwitterConfig.CONSUMER_SECRET = args[1];
         TwitterKafkaConfig.TwitterConfig.TOKEN = args[2];
         TwitterKafkaConfig.TwitterConfig.SECRET = args[3];
-        TwitterKafkaConfig.TwitterConfig.TERM = args[4]; // term on twitter on which you want to filter the results on.
-
+        TwitterKafkaConfig.TwitterConfig.TERM = args[4];
+        TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s", TwitterKafkaConfig.KafkaConfig.TOPIC, TwitterKafkaConfig.TwitterConfig.TERM);
+        TwitterKafkaConfig.TwitterConfig.TERM = TwitterKafkaConfig.TwitterConfig.TERM.replace('_', ' '); // term on twitter on which you want to filter the results on.
         if (args.length > 5) {
             TwitterKafkaConfig.KafkaConfig.SERVERS = args[5];
         }

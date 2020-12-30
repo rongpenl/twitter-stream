@@ -1,6 +1,6 @@
 runtime: custom
 env: flex
-service: twitter-kafka-stream-vaccine
+service: twitter-kafka-stream-climate
 runtime_config:
   jdk: openjdk8
 
