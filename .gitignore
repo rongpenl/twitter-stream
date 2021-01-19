@@ -158,3 +158,6 @@ target
 *.iml
 
 params.yaml
+
+.classpath 
+.project
