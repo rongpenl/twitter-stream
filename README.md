@@ -12,9 +12,10 @@ Where I started:
 
 1. Extensive Python programming knowledge but little Java knowledge. Can read Java code but not familiar with the tools/IDE, etc.
 2. Extensive Machine learning knowledge. 
-3. Have experience working with Twitter API using `twarc` and `tweepy`. 
-4. Some theoretical knowledge about distributed systems.API
-5. Some practical experience with AWS EC2, S3, networking, etc.
+3. Have experience working with Twitter API using `twarc` and `tweepy`.
+4. Some practical experience working with Docker.
+5. Some theoretical knowledge about distributed systems.
+6. Some practical experience with AWS EC2, S3, networking, etc.
 
 Where I want to go:
 

@@ -1,10 +1,6 @@
-[![Build Status](https://travis-ci.org/rongpenl/twitter-stream.svg?branch=master)](https://travis-ci.org/rongpenl/twitter-stream)
-[![GitHub stars](https://img.shields.io/github/stars/rongpenl/twitter-stream.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/saurzcode/twitter-stream/stargazers/)
-[![GitHub forks](https://img.shields.io/github/forks/rongpenl/twitter-stream.svg?style=social&label=Fork&maxAge=2592000)](https://GitHub.com/saurzcode/twitter-stream/network/)
-[![GitHub watchers](https://img.shields.io/github/watchers/rongpenl/twitter-stream.svg?style=social&label=Watch&maxAge=2592000)](https://GitHub.com/saurzcode/twitter-stream/watchers/)
-[![GitHub contributors](https://img.shields.io/github/contributors/rongpenl/twitter-stream.svg)](https://GitHub.com/saurzcode/twitter-stream/graphs/contributors/)
-
 # twitter-stream
+
+This is the original development doc.
 
 - [twitter-stream](#twitter-stream)
 - [Requirements :](#requirements-)
