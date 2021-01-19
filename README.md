@@ -1,8 +1,9 @@
 # About
-
+- [About](#about)
+  - [Deploying to Google App Engine](#deploying-to-google-app-engine)
 Kafka producer app for Twitter filtered stream API
 
-# Deploying to Google App Engine
+## Deploying to Google App Engine
 
 - Create params.yaml file with the following content replacing the values accordingly.
 

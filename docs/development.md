@@ -5,6 +5,12 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/saurzcode/twitter-stream.svg)](https://GitHub.com/saurzcode/twitter-stream/graphs/contributors/)
 
 # twitter-stream
+
+- [twitter-stream](#twitter-stream)
+- [Requirements :](#requirements-)
+- [How to Run](#how-to-run)
+- [Build Environment :](#build-environment-)
+
 Twitter-Kafka Data Pipeline
 
 # Requirements :
