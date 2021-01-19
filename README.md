@@ -21,10 +21,10 @@ Where I want to go:
 1. Practical knowledge and skills working with `maven`.
 2. Practical experience with Kafka.
 3. Reproduce the original product on Google Cloud Platform.
-4. Migrate the product to Amazon Web services.
+4. Migrate the product to Amazon Web Services.
 5. Add ElasticSearch full-text function.
 
-In order to honor Twitter [TOS](https://twitter.com/en/tos)
+In order to honor Twitter [TOS](https://twitter.com/en/tos), I am not going to share sample data in this repo.
 
 ## Local environment
 
