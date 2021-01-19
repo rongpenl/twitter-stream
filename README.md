@@ -1,8 +1,11 @@
 # Kafka producer app for Twitter filtered stream API.
 - [Kafka producer app for Twitter filtered stream API.](#kafka-producer-app-for-twitter-filtered-stream-api)
+  - [Components](#components)
+    - [Producer (Twitter to Kafka)](#producer-twitter-to-kafka)
   - [Local environment](#local-environment)
   - [Cloud environment](#cloud-environment)
     - [Deploying to Google App Engine](#deploying-to-google-app-engine)
+      - [Producer (Twitter to Kafka)](#producer-twitter-to-kafka-1)
 
 I am trying to replicate the product in this [blog post](https://qulia.medium.com/realtime-dashboard-app-with-kafka-beam-dataflow-bigquery-data-studio-and-streamlit-c9f63d44e417). 
 
@@ -27,25 +30,20 @@ Where I want to go:
 
 In order to honor Twitter [TOS](https://twitter.com/en/tos), I am not going to share sample data in this repo.
 
+## Components
+
+### Producer (Twitter to Kafka)
+
+[producer directory readme](./producer/README.md).
+
 ## Local environment
 
 ![Original Components](https://miro.medium.com/max/1400/1*UPT1tKGFIvP6RhnY72-HuA.png)
-
-TODO
 
 ## Cloud environment
 
 ### Deploying to Google App Engine
 
-- Create params.yaml file with the following content replacing the values accordingly.
+#### Producer (Twitter to Kafka)
 
-```text
-env_variables:
-  TWITTER_KAFKA_CONFIG: "[Twitter API credentials] [filter topics] [bootstrap server]"
-```
-
-- Deploy to Google App Engine with:
-
-```shell
-make gcloud-deploy
-```
+[producer directory readme](./producer/README.md).

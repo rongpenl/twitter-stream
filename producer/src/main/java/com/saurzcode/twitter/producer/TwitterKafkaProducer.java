@@ -99,7 +99,7 @@ public class TwitterKafkaProducer {
         TwitterKafkaConfig.TwitterConfig.TOKEN = args[2];
         TwitterKafkaConfig.TwitterConfig.SECRET = args[3];
         TwitterKafkaConfig.TwitterConfig.TERM = args[4];
-        TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s", TwitterKafkaConfig.KafkaConfig.TOPIC, TwitterKafkaConfig.TwitterConfig.TERM);
+        // TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s", TwitterKafkaConfig.KafkaConfig.TOPIC, TwitterKafkaConfig.TwitterConfig.TERM);
         TwitterKafkaConfig.TwitterConfig.TERM = TwitterKafkaConfig.TwitterConfig.TERM.replace('_', ' '); // term on twitter on which you want to filter the results on.
         if (args.length > 5) {
             TwitterKafkaConfig.KafkaConfig.SERVERS = args[5];
@@ -108,9 +108,9 @@ public class TwitterKafkaProducer {
         if (args.length > 6) {
             TwitterKafkaConfig.KafkaConfig.USER_NAME = args[6];
             TwitterKafkaConfig.KafkaConfig.PASSWORD = args[7];
-            TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s",
-                    TwitterKafkaConfig.KafkaConfig.USER_NAME,
-                    TwitterKafkaConfig.KafkaConfig.TOPIC);
+            // TwitterKafkaConfig.KafkaConfig.TOPIC = String.format("%s-%s",
+            //         TwitterKafkaConfig.KafkaConfig.USER_NAME,
+            //         TwitterKafkaConfig.KafkaConfig.TOPIC);
         }
         TwitterKafkaProducer.run();
 

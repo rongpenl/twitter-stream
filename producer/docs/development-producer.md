@@ -1,95 +1,84 @@
 # twitter-stream
 
-This is the original development doc.
+This is the original development doc. I updated requirements, added comments. and removed redundant and obsolete information.
 
 - [twitter-stream](#twitter-stream)
-- [Requirements :](#requirements-)
-- [How to Run](#how-to-run)
-- [Build Environment :](#build-environment-)
+  - [Requirements](#requirements)
+  - [How to Run](#how-to-run)
+    - [Start zookeeper and kafka services](#start-zookeeper-and-kafka-services)
+    - [Compile and run the binary executable file](#compile-and-run-the-binary-executable-file)
+    - [Examine the output](#examine-the-output)
 
 Twitter-Kafka Data Pipeline
 
-# Requirements :
+## Requirements
+
+The following configuration is provided in the original document.
 
 Apache Kafka 2.6.0
 Twitter Developer account ( for API Key, Secret etc.)
 Apache Zookeeper ( required for Kafka)
 Oracle JDK 1.8 (64 bit )
 
+---
 
-# How to Run
-Provide JVM Argument for TwitterKafkaProducer.java in following order
+The following configuration is tested on a Ubuntu 20.04 machine as January 2021.
 
-java TwitterKafkaProducer.java <consumer_key> <consumer_secret> <account_token> <account_secret> <hashtag/term>
+TODO
 
-You can configure name of the topic in [TwittterKafkaConfig.java](src/main/java/com/saurzcode/twitter/config/TwitterKafkaConfig.java)
-# Build Environment :
-Eclipse/Intellij
-Apache Maven
+## How to Run
 
-Detailed steps available here -
-http://saurzcode.in/2015/02/kafka-producer-using-twitter-stream/
+### Start zookeeper and kafka services
 
-```
-java -version
-openjdk version "1.8.0_272"
-OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_272-b10)
-OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.272-b10, mixed mode)
-```
+No matter which way you want to use. You have to ensure the `zookeeper` and `kafka` services are available. You can start it as a deamon as described [here](https://computingforgeeks.com/configure-apache-kafka-on-ubuntu/) or start them explicitly as following.
 
-```
-brew install maven
-mvn --version
-Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
-Maven home: /usr/local/Cellar/maven/3.6.3_1/libexec
-Java version: 15.0.1, vendor: N/A, runtime: /usr/local/Cellar/openjdk/15.0.1/libexec/openjdk.jdk/Contents/Home
-Default locale: en_US, platform encoding: UTF-8
-OS name: "mac os x", version: "10.15.7", arch: "x86_64", family: "mac"
-```
+- Step 1: start zookeeper.
 
-```
-brew install kafka
-brew info kafka
-kafka: stable 2.6.0 (bottled)
-Publish-subscribe messaging rethought as a distributed commit log
-https://kafka.apache.org/
-/usr/local/Cellar/kafka/2.6.0 (278 files, 64.0MB) *
-  Poured from bottle on 2020-11-04 at 13:41:28
-From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/kafka.rb
-License: Apache-2.0
-==> Dependencies
-Required: openjdk ✔, zookeeper ✔
-==> Caveats
-To have launchd start kafka now and restart at login:
-  brew services start kafka
-Or, if you don't want/need a background service you can just run:
-  zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties & kafka-server-start /usr/local/etc/kafka/server.properties
-==> Analytics
-install: 5,165 (30 days), 15,412 (90 days), 66,843 (365 days)
-install-on-request: 5,143 (30 days), 15,276 (90 days), 65,971 (365 days)
-build-error: 0 (30 days)
-```
-
-```
+```shell
 # terminal 1
-zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties
+zookeeper-server-start.sh /usr/local/etc/kafka/zookeeper.properties
 ```
 
-```
+- Step 2: start kafka.
+
+```shell
 # terminal 2
-kafka-server-start /usr/local/etc/kafka/server.properties
+kafka-server-start.sh /usr/local/etc/kafka/server.properties
 ```
 
-```
+- Step 3: create a topic.
+
+```shell
 # terminal 3
-kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter-topic
-kafka-topics --describe --zookeeper localhost:2181 --topic twitter-topic
+kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic twitter-topic
+```
 
+Describe the topic you just created (optional).
+
+```shell
+kafka-topics.sh --describe --zookeeper localhost:2181 --topic twitter-topic
+```
+
+- Additional commands
+
+To remove all topics.
+
+```shell
+kafka-topics.sh --delete localhost:9092 --topic <anytopic>
+```
+
+### Compile and run the binary executable file
+
+You can configure name of the topic in [TwittterKafkaConfig.java](src/main/java/com/saurzcode/twitter/config/TwitterKafkaConfig.java).
+
+```shell
 mvn package
 java -jar target/twitter-stream-0.0.1-SNAPSHOT-jar-with-dependencies.jar [args]
 ```
 
-```
+### Examine the output
+
+```shell
 # tail
-kafka-console-consumer --bootstrap-server localhost:9092 --topic twitter-topic --from-beginning
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic twitter-topic --from-beginning
 ```
